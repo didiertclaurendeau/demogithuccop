@@ -3,7 +3,7 @@
 Crée moi un fichier MD qui avec une procédure pour résoudre une équation quadratique. Mets moi tous les étapers pour m'aider à faire la démontration à des étudiants.
 ```
 
-[[equation_quadratique]]
+[equation_quadratique](equation_quadratique.md)
 
 ```prompt
 Cree moi un fichiel html avec du javascript permettant d'explique comment la résolution de cette équation est en lien avec une fonction x/y
@@ -15,7 +15,7 @@ https://cegep.fdtt.space/demo/equation_quadratique.html
 Je donne un cours de physique et je veux faire une page intéractive pour démontrer le concept de friction statique vers dynamique. Je veux donc être en mesure de montrer un objet sur une pente ou on voit les fictiions représentés à l'aide d'une flèches et je peux changer la pente pour changer les conditions.
 ```
 
-![[Pasted image 20260602090014.png]]
+![Pasted image 20260602090014.png](Pasted%20image%2020260602090014.png)
 
 ```prompt
 Crée moi un fichier md avec un tableau historique des grands philosophes pour permettre de donner une idée a mes étudiants de l'évolution . Mets les années, le nom et le type de doctrine que ces philosophe ont apportés
@@ -25,7 +25,7 @@ Crée moi un fichier md avec un tableau historique des grands philosophes pour p
 ­https://cegep.fdtt.space/demo/friction.html 
 
 
-[[philosophes_historique]]
+[philosophes_historique](philosophes_historique.md)
 
 ```prompt
 Je veux créer un laboratoire pour les étudiants pour les base de l'utilisation d'un IOT. Je veux que durant ce laboratoire ils effectuent le montage sur une plaquette avec un Raspberry PI ou un bouton augumente un compteur sur un LCD.  C'est une première expérience et donc le laboratoire doit guider les étudiants pas a pas pour le réaliser. Utilise des fichiers markdown .MD pour créer la procédure. Pour faire les directives de montage utilise du ASCII art. Lorsque l'étudiant presse le bouton un LED doit s'afficher pour une demi seconde et le compteur sur le LCD doit incrémenter. 
@@ -35,7 +35,7 @@ Le LCD est le LCD1602 et pour les résistances les étudiants on accès a des 22
 Cree l'expérience dans un répertoire lab
 ```
 
-[[lab/README]]
+[lab/README](lab/README.md)
 
 ```prompt
 Dans  le répertoire devoirs il y a plusieurs répertoires avec des travaux d'étudiants. Je voudrais que tu évalues la réponses des étudiants pour la section 3.1 dans la zone OBSERVATIONS. Qu'elle étudiant a le mieux répondu?
@@ -74,22 +74,22 @@ Il identifie clairement les 3 étapes, le mécanisme de la race condition, le te
 Je veux donner une bonne rétroaction à l'étudiant pour le travail 656fb86. Crée moi un fichier retro.md qui donne une rétroaction à tout les réponses de l'étudiant
 ```
 
-[[retro]]
+[retro](retro.md)
 
 ```prompt
 Je veux créer un cours pour un programme diététique ou je veux expliquer la production des graisses versus l'alimentation et l'exercices. Donc ici je veux créer trois cours sur les différent concepts pour comprendre l'importance de ces concept. Crée un répertoire cours avec un proposition pour ces trois cours. Chaque cours doivent avoir une durée de 3 heures et inclure une partie pratique ou laboratoire d'une heure et demi pour les étudiants. 
 ```
 
-[[cours/README]]
+[cours/README](cours/README.md)
 
 ```prompt
 Crée moi une évaluation les trois cours contenus dans le répertoire cours. Je veux 5 choix multiples et 2 questions à dévelopement
 ```
 
-[[evaluation]]
+[evaluation](evaluation.md)
 
 # Quota
 
 Depuis le premier juin un système de quota fut mis en place et il est donc possible qu'il y ait maintenant une limite d'utilisation mensuel. Dans le passé des limites étaient affichées mais pas prise en compte donc il est aussi possible que ce nouveau système n'ait pas d'impact.
 
-![[Pasted image 20260603070838.png]]
+![Pasted image 20260603070838.png](Pasted%20image%2020260603070838.png)
