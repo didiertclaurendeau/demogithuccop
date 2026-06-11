@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Équation Quadratique & Fonction</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f4f8;
+            color: #222;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 0.4rem;
+            color: #1a237e;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .layout {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ── Panel gauche : contrôles + infos ── */
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .panel h2 {
+            color: #1a237e;
+            font-size: 1.1rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .input-row label {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #333;
+            min-width: 90px;
+        }
+
+        .input-row input[type=range] {
+            flex: 1;
+            accent-color: #3949ab;
+        }
+
+        .input-row .val {
+            font-weight: 700;
+            color: #3949ab;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .equation-display {
+            background: #e8eaf6;
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            color: #1a237e;
+        }
+
+        .steps {
+            background: #f9f9f9;
+            border-left: 4px solid #3949ab;
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
+
+        .steps .step-title {
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 0.3rem;
+        }
+
+        .result-box {
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            font-weight: 600;
+        }
+
+        .result-two {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1.5px solid #a5d6a7;
+        }
+
+        .result-one {
+            background: #fff8e1;
+            color: #f57f17;
+            border: 1.5px solid #ffe082;
+        }
+
+        .result-none {
+            background: #fce4ec;
+            color: #c62828;
+            border: 1.5px solid #ef9a9a;
+        }
+
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ── Canvas ── */
+        .canvas-wrap {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            flex: 1 1 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .canvas-wrap h2 {
+            color: #1a237e;
+            font-size: 1.1rem;
+            align-self: flex-start;
+        }
+
+        canvas {
+            border: 1px solid #dde;
+            border-radius: 8px;
+            max-width: 100%;
+        }
+
+        .explain-box {
+            background: #e8eaf6;
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #333;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Équation Quadratique &amp; Fonction f(x) = ax² + bx + c</h1>
+    <p class="subtitle">
+        Les <strong>solutions de l'équation</strong> ax² + bx + c = 0 sont les points où
+        la <strong>parabole coupe l'axe des x</strong> (y = 0).
+    </p>
+
+    <div class="layout">
+
+        <!-- ══ PANNEAU GAUCHE ══ -->
+        <div class="panel">
+
+            <h2>⚙️ Paramètres</h2>
+
+            <div class="input-group">
+                <div class="input-row">
+                    <label>a = </label>
+                    <input type="range" id="sliderA" min="-3" max="3" step="0.5" value="1" />
+                    <span class="val" id="valA">1</span>
+                </div>
+                <div class="input-row">
+                    <label>b = </label>
+                    <input type="range" id="sliderB" min="-6" max="6" step="0.5" value="-2" />
+                    <span class="val" id="valB">-2</span>
+                </div>
+                <div class="input-row">
+                    <label>c = </label>
+                    <input type="range" id="sliderC" min="-6" max="6" step="0.5" value="-3" />
+                    <span class="val" id="valC">-3</span>
+                </div>
+            </div>
+
+            <div class="equation-display" id="eqDisplay">f(x) = x² − 2x − 3</div>
+
+            <!-- Calcul pas-à-pas -->
+            <div class="steps">
+                <div class="step-title">📐 Calcul du discriminant</div>
+                <div id="stepDelta"></div>
+            </div>
+
+            <div class="result-box" id="resultBox"></div>
+
+            <!-- Légende -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:#3949ab"></div>
+                    <span>Parabole f(x) = ax² + bx + c</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:#e53935"></div>
+                    <span>Racine(s) — intersection avec l'axe x</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:#43a047"></div>
+                    <span>Sommet de la parabole</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ══ PANNEAU DROIT (graphique) ══ -->
+        <div class="canvas-wrap">
+            <h2>📈 Représentation graphique</h2>
+            <canvas id="graph" width="520" height="420"></canvas>
+            <div class="explain-box" id="explainBox"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // ── Éléments ──────────────────────────────────────────────
+        const sliderA = document.getElementById('sliderA');
+        const sliderB = document.getElementById('sliderB');
+        const sliderC = document.getElementById('sliderC');
+        const valA = document.getElementById('valA');
+        const valB = document.getElementById('valB');
+        const valC = document.getElementById('valC');
+        const eqDisplay = document.getElementById('eqDisplay');
+        const stepDelta = document.getElementById('stepDelta');
+        const resultBox = document.getElementById('resultBox');
+        const explainBox = document.getElementById('explainBox');
+        const canvas = document.getElementById('graph');
+        const ctx = canvas.getContext('2d');
+
+        // ── Utilitaires ───────────────────────────────────────────
+        function fmt(n) {
+            // Affiche le nombre avec signe, évite -0
+            const v = Math.round(n * 100) / 100;
+            return v;
+        }
+
+        function buildEqString(a, b, c) {
+            let s = 'f(x) = ';
+            // terme ax²
+            if (a === 1) s += 'x²';
+            else if (a === -1) s += '−x²';
+            else s += (a < 0 ? '−' : '') + Math.abs(a) + 'x²';
+            // terme bx
+            if (b !== 0) {
+                if (b === 1) s += ' + x';
+                else if (b === -1) s += ' − x';
+                else if (b > 0) s += ' + ' + b + 'x';
+                else s += ' − ' + Math.abs(b) + 'x';
+            }
+            // terme c
+            if (c !== 0) {
+                if (c > 0) s += ' + ' + c;
+                else s += ' − ' + Math.abs(c);
+            }
+            return s;
+        }
+
+        // ── Graphique ─────────────────────────────────────────────
+        const W = canvas.width;
+        const H = canvas.height;
+        const PAD = 40;
+
+        // Domaine x affiché
+        const X_MIN = -6, X_MAX = 6;
+        const Y_MIN = -10, Y_MAX = 10;
+
+        function toCanvas(x, y) {
+            const cx = PAD + (x - X_MIN) / (X_MAX - X_MIN) * (W - 2 * PAD);
+            const cy = PAD + (Y_MAX - y) / (Y_MAX - Y_MIN) * (H - 2 * PAD);
+            return [cx, cy];
+        }
+
+        function drawGraph(a, b, c) {
+            ctx.clearRect(0, 0, W, H);
+
+            // Fond
+            ctx.fillStyle = '#fafafa';
+            ctx.fillRect(0, 0, W, H);
+
+            // Grille légère
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            for (let x = Math.ceil(X_MIN); x <= X_MAX; x++) {
+                const [cx] = toCanvas(x, 0);
+                ctx.beginPath(); ctx.moveTo(cx, PAD); ctx.lineTo(cx, H - PAD); ctx.stroke();
+            }
+            for (let y = Math.ceil(Y_MIN); y <= Y_MAX; y++) {
+                const [, cy] = toCanvas(0, y);
+                ctx.beginPath(); ctx.moveTo(PAD, cy); ctx.lineTo(W - PAD, cy); ctx.stroke();
+            }
+
+            // Axes
+            ctx.strokeStyle = '#555';
+            ctx.lineWidth = 2;
+            // axe x
+            const [, yAxis] = toCanvas(0, 0);
+            ctx.beginPath(); ctx.moveTo(PAD, yAxis); ctx.lineTo(W - PAD, yAxis); ctx.stroke();
+            // axe y
+            const [xAxis] = toCanvas(0, 0);
+            ctx.beginPath(); ctx.moveTo(xAxis, PAD); ctx.lineTo(xAxis, H - PAD); ctx.stroke();
+
+            // Flèches
+            ctx.fillStyle = '#555';
+            // flèche droite axe x
+            ctx.beginPath();
+            ctx.moveTo(W - PAD, yAxis);
+            ctx.lineTo(W - PAD - 10, yAxis - 5);
+            ctx.lineTo(W - PAD - 10, yAxis + 5);
+            ctx.fill();
+            // flèche haut axe y
+            ctx.beginPath();
+            ctx.moveTo(xAxis, PAD);
+            ctx.lineTo(xAxis - 5, PAD + 10);
+            ctx.lineTo(xAxis + 5, PAD + 10);
+            ctx.fill();
+
+            // Labels axes
+            ctx.fillStyle = '#555';
+            ctx.font = '13px Segoe UI';
+            ctx.fillText('x', W - PAD + 6, yAxis + 5);
+            ctx.fillText('y', xAxis + 6, PAD - 5);
+
+            // Graduations
+            ctx.fillStyle = '#777';
+            ctx.font = '10px Segoe UI';
+            for (let x = X_MIN + 1; x < X_MAX; x++) {
+                if (x === 0) continue;
+                const [cx, cy0] = toCanvas(x, 0);
+                ctx.fillText(x, cx - 5, cy0 + 14);
+                ctx.beginPath(); ctx.moveTo(cx, cy0 - 3); ctx.lineTo(cx, cy0 + 3);
+                ctx.strokeStyle = '#555'; ctx.lineWidth = 1; ctx.stroke();
+            }
+            for (let y = Y_MIN + 1; y < Y_MAX; y++) {
+                if (y === 0) continue;
+                const [cx0, cy] = toCanvas(0, y);
+                ctx.fillText(y, cx0 + 4, cy + 4);
+                ctx.beginPath(); ctx.moveTo(cx0 - 3, cy); ctx.lineTo(cx0 + 3, cy);
+                ctx.strokeStyle = '#555'; ctx.lineWidth = 1; ctx.stroke();
+            }
+
+            // Parabole
+            ctx.beginPath();
+            ctx.strokeStyle = '#3949ab';
+            ctx.lineWidth = 2.5;
+            let first = true;
+            const steps = 400;
+            for (let i = 0; i <= steps; i++) {
+                const x = X_MIN + (X_MAX - X_MIN) * i / steps;
+                const y = a * x * x + b * x + c;
+                const [cx, cy] = toCanvas(x, y);
+                if (first) { ctx.moveTo(cx, cy); first = false; }
+                else { ctx.lineTo(cx, cy); }
+            }
+            ctx.stroke();
+
+            // Discriminant & racines
+            const delta = b * b - 4 * a * c;
+
+            if (a !== 0 && delta >= 0) {
+                const sqrtD = Math.sqrt(delta);
+                const roots = [];
+                if (delta > 0) {
+                    roots.push((-b - sqrtD) / (2 * a));
+                    roots.push((-b + sqrtD) / (2 * a));
+                } else {
+                    roots.push(-b / (2 * a));
+                }
+                roots.forEach(rx => {
+                    if (rx >= X_MIN && rx <= X_MAX) {
+                        const [cx, cy0] = toCanvas(rx, 0);
+                        // Ligne verticale pointillée
+                        ctx.setLineDash([5, 4]);
+                        ctx.strokeStyle = '#e53935';
+                        ctx.lineWidth = 1.5;
+                        const [, rcy] = toCanvas(rx, a * rx * rx + b * rx + c);
+                        ctx.beginPath(); ctx.moveTo(cx, cy0); ctx.lineTo(cx, rcy); ctx.stroke();
+                        ctx.setLineDash([]);
+                        // Point rouge sur l'axe x
+                        ctx.beginPath();
+                        ctx.arc(cx, cy0, 7, 0, 2 * Math.PI);
+                        ctx.fillStyle = '#e53935';
+                        ctx.fill();
+                        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+                        // Label
+                        ctx.fillStyle = '#c62828';
+                        ctx.font = 'bold 11px Segoe UI';
+                        ctx.fillText('x=' + fmt(rx), cx + 8, cy0 - 8);
+                    }
+                });
+            }
+
+            // Sommet (vertex)
+            if (a !== 0) {
+                const vx = -b / (2 * a);
+                const vy = a * vx * vx + b * vx + c;
+                if (vx >= X_MIN && vx <= X_MAX && vy >= Y_MIN && vy <= Y_MAX) {
+                    const [cvx, cvy] = toCanvas(vx, vy);
+                    ctx.beginPath();
+                    ctx.arc(cvx, cvy, 6, 0, 2 * Math.PI);
+                    ctx.fillStyle = '#43a047';
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+                    ctx.fillStyle = '#2e7d32';
+                    ctx.font = 'bold 10px Segoe UI';
+                    ctx.fillText('S(' + fmt(vx) + '; ' + fmt(vy) + ')', cvx + 8, cvy - 8);
+                }
+            }
+        }
+
+        // ── Mise à jour complète ───────────────────────────────────
+        function update() {
+            const a = parseFloat(sliderA.value);
+            const b = parseFloat(sliderB.value);
+            const c = parseFloat(sliderC.value);
+
+            // Valeurs affichées
+            valA.textContent = a;
+            valB.textContent = b;
+            valC.textContent = c;
+
+            // Équation
+            eqDisplay.textContent = buildEqString(a, b, c);
+
+            // Discriminant
+            const delta = b * b - 4 * a * c;
+            const deltaStr = `Δ = b² − 4ac = (${b})² − 4×(${a})×(${c}) = ${fmt(b * b)} − ${fmt(4 * a * c)} = <strong>${fmt(delta)}</strong>`;
+            stepDelta.innerHTML = deltaStr;
+
+            // Résultat
+            resultBox.className = 'result-box';
+            let resultHTML = '';
+            let explainHTML = '';
+
+            if (a === 0) {
+                resultBox.classList.add('result-none');
+                resultHTML = '⚠️ a = 0 : ce n\'est plus une équation quadratique.';
+                explainHTML = '<strong>a = 0</strong> : la fonction devient linéaire (une droite), pas une parabole.';
+            } else if (delta > 0) {
+                const sqrtD = Math.sqrt(delta);
+                const x1 = fmt((-b - sqrtD) / (2 * a));
+                const x2 = fmt((-b + sqrtD) / (2 * a));
+                resultBox.classList.add('result-two');
+                resultHTML = `✅ Δ = ${fmt(delta)} > 0 → <strong>2 solutions réelles</strong><br>
+        x₁ = (−${b} − √${fmt(delta)}) / (2×${a}) = <strong>${x1}</strong><br>
+        x₂ = (−${b} + √${fmt(delta)}) / (2×${a}) = <strong>${x2}</strong>`;
+                explainHTML = `La parabole <strong>coupe l'axe des x en deux points</strong> distincts : 
+        x = ${x1} et x = ${x2}.<br>
+        Ces deux valeurs sont les zéros de f(x), c'est-à-dire là où f(x) = 0.
+        Graphiquement, ce sont les <span style="color:#e53935;font-weight:bold">points rouges</span>.`;
+            } else if (delta === 0) {
+                const x0 = fmt(-b / (2 * a));
+                resultBox.classList.add('result-one');
+                resultHTML = `⚠️ Δ = 0 → <strong>1 solution (racine double)</strong><br>
+        x₀ = −b / (2a) = ${-b} / ${2 * a} = <strong>${x0}</strong>`;
+                explainHTML = `La parabole est <strong>tangente à l'axe des x</strong> en un seul point : x = ${x0}.<br>
+        Le sommet de la parabole touche exactement l'axe, c'est à la fois le <span style="color:#e53935;font-weight:bold">point rouge</span> et le <span style="color:#43a047;font-weight:bold">sommet vert</span>.`;
+            } else {
+                resultBox.classList.add('result-none');
+                resultHTML = `❌ Δ = ${fmt(delta)} < 0 → <strong>Aucune solution réelle</strong>`;
+                explainHTML = `La parabole <strong>ne coupe jamais l'axe des x</strong>.<br>
+        Elle est entièrement au-dessus (si a > 0) ou en-dessous (si a < 0) de l'axe, donc f(x) = 0 n'a pas de solution réelle.
+        Il n'y a donc <strong>aucun point rouge</strong> sur le graphique.`;
+            }
+
+            resultBox.innerHTML = resultHTML;
+            explainBox.innerHTML = `<strong>🔗 Lien équation ↔ graphique :</strong><br>${explainHTML}`;
+
+            drawGraph(a, b, c);
+        }
+
+        // ── Événements ────────────────────────────────────────────
+        sliderA.addEventListener('input', update);
+        sliderB.addEventListener('input', update);
+        sliderC.addEventListener('input', update);
+
+        // Premier rendu
+        update();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+
+Il faut s'incrire a GitHub Education lorsque complété il faut activer le GitHub Copilot avec ce lien
+
+![[Pasted image 20260604145739.png]]
+
+
+>[!warning] Il semble y avoir un soucis pour les activations récente:
+> > The automated verification is clearly broken for faculty — it rejects even perfect documents with no specific error, which makes it impossible to fix on your end. What actually works: skip the automated flow entirely and open a GitHub Support ticket manually at [https://support.github.com](https://can01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsupport.github.com%2F&data=05%7C02%7Crobert.morisset%40claurendeau.qc.ca%7C85d81413cff74a37113f08dec26bfdcf%7Cc0eecc4d675b4b9081a0a5cd46c51b04%7C0%7C0%7C639161966277253169%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=FwiqHHxT7W1OJAQIgiLG1XCxEXTXVySDBlNp7MFbPBk%3D&reserved=0 "https://can01.safelinks.protection.outlook.com/?url=https%3a%2f%2fsupport.github.com%2f&data=05%7c02%7crobert.morisset%40claurendeau.qc.ca%7c85d81413cff74a37113f08dec26bfdcf%7cc0eecc4d675b4b9081a0a5cd46c51b04%7c0%7c0%7c639161966277253169%7cunknown%7ctwfpbgzsb3d8eyjfbxb0eu1hcgkionrydwusilyioiiwljaumdawmcisilaioijxaw4zmiisikfoijoitwfpbcisilduijoyfq%3d%3d%7c0%7c%7c%7c&sdata=fwiqhhxt7w1ojaqigilg1xcxextxvysdblnp7mfbpbk%3d&reserved=0"). Don't use "verification failed" as the subject — pick something like "GitHub Education faculty account" instead, attach your photo ID along with your employment letter, and a human will process it...

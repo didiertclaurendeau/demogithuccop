@@ -1,0 +1,243 @@
+{
+  "main": {
+    "id": "5283569e7cf12673",
+    "type": "split",
+    "children": [
+      {
+        "id": "e5da5d8b00ddcecd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b1bd3464a4f67fa5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Exemple de requetes.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Exemple de requetes"
+            }
+          },
+          {
+            "id": "32233996d8372786",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "99e14731300552a6",
+    "type": "split",
+    "children": [
+      {
+        "id": "f91008db90c45319",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "70bf9de55be08511",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorateur de fichiers"
+            }
+          },
+          {
+            "id": "83bc3fda0fec4084",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Rechercher"
+            }
+          },
+          {
+            "id": "808376a86004370e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Signets"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b6feb92c48401104",
+    "type": "split",
+    "children": [
+      {
+        "id": "55c0871cf7ec3641",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "029f9e16ecaddb3c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Exemple de requetes.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Rétrolien pour Exemple de requetes"
+            }
+          },
+          {
+            "id": "f8c8d1622cf514b8",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Exemple de requetes.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Liens sortants de Exemple de requetes"
+            }
+          },
+          {
+            "id": "40ed08ad35e09451",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Mots-clés"
+            }
+          },
+          {
+            "id": "a19202098222f092",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Toutes les propriétés"
+            }
+          },
+          {
+            "id": "7c7e9a65f4cf1017",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Exemple de requetes.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Plan de Exemple de requetes"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Ouvrir le sélecteur rapide": false,
+      "graph:Ouvrir la vue graphique": false,
+      "canvas:Créer une nouvelle toile": false,
+      "daily-notes:Ouvrir la note quotidienne": false,
+      "templates:Insérer le modèle": false,
+      "command-palette:Ouvrir la palette de commandes": false,
+      "bases:Créer une nouvelle base": false
+    }
+  },
+  "active": "32233996d8372786",
+  "lastOpenFiles": [
+    "lab/README.md",
+    "README.md",
+    "cours/README.md",
+    "collab_teams/laboratoire_equipe.md",
+    "collab_teams/cours_collaboration_teams.md",
+    "lab/01_preparation.md",
+    "lab/02_montage.md",
+    "lab/03_programmation.md",
+    "lab/04_test_validation.md",
+    "philosophes_historique.md",
+    "equation_quadratique.md",
+    "collab_teams",
+    "Travaux étudiants/F.txt",
+    "Travaux étudiants/E.txt",
+    "Travaux étudiants/D.txt",
+    "Travaux étudiants/C.txt",
+    "Travaux étudiants/B.txt",
+    "Travaux étudiants/A.txt",
+    "Travaux étudiants",
+    "Activation GitHub.md",
+    "Pasted image 20260604145739.png",
+    "Pasted image 20260603070838.png",
+    "cours/evaluation.md",
+    "cours/cours_03_exercice_oxydation_graisses.md",
+    "cours/cours_02_alimentation_gestion_graisses.md",
+    "cours/cours_01_metabolisme_lipides.md",
+    "cours",
+    "devoirs/656fb86/retro.md",
+    "devoirs/b13342c/README.md",
+    "devoirs/b13342c",
+    "devoirs/b10e6e3/README.md",
+    "devoirs/b0a6c1c/README.md",
+    "devoirs/3343f74/README.md",
+    "devoirs/21613c6/README.md",
+    "devoirs/78b3405/README.md",
+    "devoirs/67aa12a/README.md",
+    "devoirs/68cf22e/README.md",
+    "devoirs/00f8521/README.md",
+    "Pasted image 20260602090014.png"
+  ]
+}

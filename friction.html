@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Friction statique & dynamique</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f4f8;
+            color: #222;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #1a237e;
+            margin-bottom: 0.3rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            font-size: 0.93rem;
+            margin-bottom: 2rem;
+        }
+
+        .layout {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        /* ── Panneau contrôles ── */
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .1);
+            flex: 0 0 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .panel h2 {
+            color: #1a237e;
+            font-size: 1rem;
+            border-bottom: 2px solid #e8eaf6;
+            padding-bottom: 0.4rem;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .slider-row .lbl {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .slider-row .lbl span {
+            color: #3949ab;
+        }
+
+        input[type=range] {
+            width: 100%;
+            accent-color: #3949ab;
+        }
+
+        .info-box {
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            font-size: 0.85rem;
+            line-height: 1.65;
+        }
+
+        .info-formulas {
+            background: #e8eaf6;
+            color: #1a237e;
+        }
+
+        .state-box {
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .state-static {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #a5d6a7;
+        }
+
+        .state-dynamic {
+            background: #fff3e0;
+            color: #e65100;
+            border: 2px solid #ffcc80;
+        }
+
+        .state-edge {
+            background: #fff8e1;
+            color: #f57f17;
+            border: 2px solid #ffe082;
+        }
+
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            font-size: 0.82rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-line {
+            width: 28px;
+            height: 4px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* ── Canvas ── */
+        .canvas-wrap {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1rem 1rem 0.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .1);
+            flex: 1 1 520px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .canvas-wrap h2 {
+            color: #1a237e;
+            font-size: 1rem;
+            align-self: flex-start;
+            border-bottom: 2px solid #e8eaf6;
+            padding-bottom: 0.4rem;
+            width: 100%;
+        }
+
+        canvas {
+            border: 1px solid #dde;
+            border-radius: 8px;
+            max-width: 100%;
+        }
+
+        .explain-box {
+            background: #f5f5f5;
+            border-left: 4px solid #3949ab;
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 0.86rem;
+            line-height: 1.65;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Friction Statique vs Dynamique</h1>
+    <p class="subtitle">
+        Modifiez l'angle de la pente et les coefficients de friction pour visualiser les forces en jeu.
+    </p>
+
+    <div class="layout">
+
+        <!-- ══ CONTRÔLES ══ -->
+        <div class="panel">
+
+            <h2>⚙️ Paramètres</h2>
+
+            <div class="slider-group">
+
+                <div class="slider-row">
+                    <div class="lbl">Angle θ (degrés) <span id="valAngle">20°</span></div>
+                    <input type="range" id="slAngle" min="0" max="75" step="1" value="20" />
+                </div>
+
+                <div class="slider-row">
+                    <div class="lbl">Masse m (kg) <span id="valMass">5 kg</span></div>
+                    <input type="range" id="slMass" min="1" max="20" step="0.5" value="5" />
+                </div>
+
+                <div class="slider-row">
+                    <div class="lbl">μ<sub>s</sub> — friction statique max <span id="valUs">0.50</span></div>
+                    <input type="range" id="slUs" min="0.05" max="1.00" step="0.01" value="0.50" />
+                </div>
+
+                <div class="slider-row">
+                    <div class="lbl">μ<sub>k</sub> — friction cinétique <span id="valUk">0.35</span></div>
+                    <input type="range" id="slUk" min="0.01" max="0.99" step="0.01" value="0.35" />
+                </div>
+
+            </div>
+
+            <!-- Formules -->
+            <div class="info-box info-formulas">
+                <strong>Rappel des formules :</strong><br>
+                N = mg·cos θ<br>
+                F<sub>gravité∥</sub> = mg·sin θ<br>
+                f<sub>s,max</sub> = μ<sub>s</sub> · N<br>
+                f<sub>k</sub> = μ<sub>k</sub> · N<br>
+                a = (mg·sin θ − f<sub>k</sub>) / m &nbsp;[si glissement]
+            </div>
+
+            <!-- État -->
+            <div class="state-box" id="stateBox">–</div>
+
+            <!-- Légende -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-line" style="background:#e53935"></div>Composante parallèle du poids (mg·sinθ)
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line" style="background:#1e88e5"></div>Force normale N
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line" style="background:#43a047"></div>Friction (statique ou cinétique)
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line"
+                        style="background:#8e24aa; height:3px; border-top: 2px dashed #8e24aa; background:none"></div>
+                    Poids total mg
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line" style="background:#fb8c00"></div>Accélération (si glissement)
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ══ GRAPHIQUE ══ -->
+        <div class="canvas-wrap">
+            <h2>📐 Diagramme des forces</h2>
+            <canvas id="scene" width="540" height="420"></canvas>
+            <div class="explain-box" id="explainBox">–</div>
+        </div>
+
+    </div>
+
+    <script>
+        const g = 9.81;
+
+        const slAngle = document.getElementById('slAngle');
+        const slMass = document.getElementById('slMass');
+        const slUs = document.getElementById('slUs');
+        const slUk = document.getElementById('slUk');
+
+        const valAngle = document.getElementById('valAngle');
+        const valMass = document.getElementById('valMass');
+        const valUs = document.getElementById('valUs');
+        const valUk = document.getElementById('valUk');
+
+        const stateBox = document.getElementById('stateBox');
+        const explainBox = document.getElementById('explainBox');
+        const canvas = document.getElementById('scene');
+        const ctx = canvas.getContext('2d');
+
+        const W = canvas.width;
+        const H = canvas.height;
+
+        // ── Dessin d'une flèche ──────────────────────────────────
+        function arrow(x0, y0, x1, y1, color, width, label, labelSide) {
+            const dx = x1 - x0, dy = y1 - y0;
+            const len = Math.hypot(dx, dy);
+            if (len < 2) return;
+
+            const headLen = Math.max(12, Math.min(22, len * 0.22));
+            const angle = Math.atan2(dy, dx);
+
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = width;
+            ctx.lineCap = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
+            ctx.stroke();
+
+            // tête de flèche
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x1 - headLen * Math.cos(angle - 0.38), y1 - headLen * Math.sin(angle - 0.38));
+            ctx.lineTo(x1 - headLen * Math.cos(angle + 0.38), y1 - headLen * Math.sin(angle + 0.38));
+            ctx.closePath();
+            ctx.fill();
+
+            // label
+            if (label) {
+                ctx.font = 'bold 12px Segoe UI';
+                ctx.fillStyle = color;
+                const side = labelSide || 'right';
+                let lx = x1 + 6, ly = y1;
+                if (side === 'left') { lx = x1 - 6 - ctx.measureText(label).width; }
+                if (side === 'top') { lx = (x0 + x1) / 2 + 4; ly = Math.min(y0, y1) - 6; }
+                if (side === 'bottom') { lx = (x0 + x1) / 2 + 4; ly = Math.max(y0, y1) + 14; }
+                ctx.fillText(label, lx, ly);
+            }
+
+            ctx.restore();
+        }
+
+        // ── Flèche en pointillés ─────────────────────────────────
+        function dashedArrow(x0, y0, x1, y1, color, width, label) {
+            ctx.save();
+            ctx.setLineDash([7, 5]);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+            ctx.setLineDash([]);
+            // tête
+            const angle = Math.atan2(y1 - y0, x1 - x0);
+            const headLen = 12;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x1 - headLen * Math.cos(angle - 0.38), y1 - headLen * Math.sin(angle - 0.38));
+            ctx.lineTo(x1 - headLen * Math.cos(angle + 0.38), y1 - headLen * Math.sin(angle + 0.38));
+            ctx.closePath(); ctx.fill();
+            if (label) {
+                ctx.font = 'bold 12px Segoe UI'; ctx.fillStyle = color;
+                ctx.fillText(label, (x0 + x1) / 2 + 6, (y0 + y1) / 2 - 6);
+            }
+            ctx.restore();
+        }
+
+        // ── Rendu principal ─────────────────────────────────────
+        function draw(thetaDeg, m, us, uk) {
+            ctx.clearRect(0, 0, W, H);
+
+            // Fond dégradé ciel
+            const sky = ctx.createLinearGradient(0, 0, 0, H);
+            sky.addColorStop(0, '#e3f2fd');
+            sky.addColorStop(1, '#bbdefb');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, H);
+
+            const theta = thetaDeg * Math.PI / 180;
+            const cosT = Math.cos(theta);
+            const sinT = Math.sin(theta);
+
+            // ── Géométrie de la pente ──────────────────────────────
+            const baseX = 60, baseY = H - 60;
+            const slopeLen = 340;
+
+            const topX = baseX + slopeLen * cosT;
+            const topY = baseY - slopeLen * sinT;
+
+            // Sol horizontal
+            ctx.fillStyle = '#8d6e63';
+            ctx.fillRect(baseX - 10, baseY, W - baseX + 10, 14);
+
+            // Pente (remplie)
+            ctx.beginPath();
+            ctx.moveTo(baseX, baseY);
+            ctx.lineTo(topX, topY);
+            ctx.lineTo(topX, baseY);
+            ctx.closePath();
+            ctx.fillStyle = '#a1887f';
+            ctx.fill();
+            ctx.strokeStyle = '#5d4037';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Texture rayures pente
+            ctx.save();
+            ctx.clip();
+            ctx.strokeStyle = 'rgba(93,64,55,0.15)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 30; i++) {
+                ctx.beginPath();
+                ctx.moveTo(baseX + i * 15, baseY);
+                ctx.lineTo(baseX + i * 15 + 30, baseY - 30);
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            // Angle arc
+            if (thetaDeg > 2) {
+                ctx.beginPath();
+                ctx.arc(baseX, baseY, 38, -theta, 0);
+                ctx.strokeStyle = '#555';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 13px Segoe UI';
+                ctx.fillText('θ = ' + thetaDeg + '°', baseX + 42, baseY - 10);
+            }
+
+            // ── Position du bloc (centre sur la pente) ─────────────
+            const t = 0.52; // position le long de la pente
+            const bCx = baseX + t * slopeLen * cosT;
+            const bCy = baseY - t * slopeLen * sinT;
+
+            const bW = 52, bH = 36; // dimensions du bloc
+
+            // Dessin du bloc (rectangle orienté)
+            ctx.save();
+            ctx.translate(bCx, bCy);
+            ctx.rotate(-theta);
+            ctx.fillStyle = '#ffa726';
+            ctx.strokeStyle = '#e65100';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(-bW / 2, -bH, bW, bH, 4);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#bf360c';
+            ctx.font = 'bold 11px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText('m = ' + m + ' kg', 0, -bH / 2 + 4);
+            ctx.restore();
+
+            // ── Calculs physiques ──────────────────────────────────
+            const W_force = m * g;           // Poids total
+            const N = m * g * cosT;    // Normale
+            const Fg_par = m * g * sinT;    // Composante parallèle du poids
+            const fs_max = us * N;           // Friction statique maximale
+            const fk = uk * N;           // Friction cinétique
+
+            const isSliding = Fg_par > fs_max;
+            const isEdge = Math.abs(Fg_par - fs_max) < 0.5;
+            const frictionActual = isSliding ? fk : Fg_par; // friction réelle
+
+            // Accélération nette si glissement
+            const accel = isSliding ? (Fg_par - fk) / m : 0;
+
+            // ── Échelle des flèches ───────────────────────────────
+            const SCALE = 4.5;
+
+            // Vecteurs unitaires sur la pente et normal
+            const parX = cosT, parY = -sinT;       // vers le haut de la pente
+            const norX = -sinT, norY = -cosT;      // normal à la pente, vers l'extérieur
+
+            // Point d'application = centre bas du bloc
+            const apX = bCx - (bH / 2) * sinT;
+            const apY = bCy - (bH / 2) * (-cosT);   // légèrement ajusté
+
+            // 1. Composante parallèle du poids (vers le bas de la pente)
+            const fp = Fg_par * SCALE;
+            arrow(apX, apY,
+                apX - parX * fp, apY - parY * fp,
+                '#e53935', 3, 'mg·sinθ = ' + Fg_par.toFixed(1) + ' N', 'left');
+
+            // 2. Normale (perpendiculaire à la pente, vers l'extérieur)
+            const fn = N * SCALE;
+            arrow(apX, apY,
+                apX + norX * fn, apY + norY * fn,
+                '#1e88e5', 3, 'N = ' + N.toFixed(1) + ' N', 'top');
+
+            // 3. Friction (vers le haut de la pente si l'objet tend à glisser)
+            const ff = frictionActual * SCALE;
+            const frLabel = isSliding
+                ? 'fₖ = ' + fk.toFixed(1) + ' N'
+                : 'fₛ = ' + frictionActual.toFixed(1) + ' N';
+            arrow(apX, apY,
+                apX + parX * ff, apY + parY * ff,
+                '#43a047', 3, frLabel, 'right');
+
+            // 4. Poids total (verticalement vers le bas)
+            dashedArrow(apX, apY, apX, apY + W_force * SCALE * 0.6, '#8e24aa', 2, 'mg = ' + W_force.toFixed(1) + ' N');
+
+            // 5. Accélération (si glissement)
+            if (isSliding && accel > 0.05) {
+                const aScale = accel * 18;
+                arrow(bCx + parX * 30, bCy + parY * 30,
+                    bCx + parX * 30 - parX * aScale, bCy + parY * 30 - parY * aScale,
+                    '#fb8c00', 4, 'a = ' + accel.toFixed(2) + ' m/s²', 'right');
+            }
+
+            // ── État et explication ───────────────────────────────
+            stateBox.className = 'state-box';
+            let stateHTML = '', explainHTML = '';
+
+            if (thetaDeg === 0) {
+                stateBox.classList.add('state-static');
+                stateHTML = '🟢 Objet en équilibre (θ = 0°)';
+                explainHTML = 'La surface est horizontale. Il n\'y a aucune composante du poids parallèle à la surface, donc aucune force motrice. La friction statique n\'a rien à compenser.';
+            } else if (isEdge) {
+                stateBox.classList.add('state-edge');
+                stateHTML = '⚠️ Limite — Glissement imminent !<br>mg·sinθ ≈ fₛ,max';
+                explainHTML = `L'objet est <strong>juste à la limite</strong> du glissement. La composante du poids parallèle à la pente (${Fg_par.toFixed(1)} N) est approximativement égale à la friction statique maximale (${fs_max.toFixed(1)} N).`;
+            } else if (!isSliding) {
+                stateBox.classList.add('state-static');
+                stateHTML = `🟢 Friction STATIQUE<br>fₛ = ${frictionActual.toFixed(1)} N &lt; fₛ,max = ${fs_max.toFixed(1)} N`;
+                explainHTML = `L'objet est <strong>immobile</strong>. La friction statique adapte sa valeur pour contrebalancer exactement la composante du poids parallèle à la pente : <strong>fₛ = mg·sinθ = ${frictionActual.toFixed(1)} N</strong>.<br>
+      Tant que cette valeur reste inférieure à fₛ,max = μₛ·N = ${fs_max.toFixed(1)} N, l'objet ne bouge pas.`;
+            } else {
+                stateBox.classList.add('state-dynamic');
+                stateHTML = `🔴 Friction CINÉTIQUE — L'objet GLISSE !<br>fₖ = ${fk.toFixed(1)} N &lt; mg·sinθ = ${Fg_par.toFixed(1)} N<br>a = ${accel.toFixed(2)} m/s²`;
+                explainHTML = `L'objet <strong>glisse</strong> car la composante du poids (${Fg_par.toFixed(1)} N) dépasse la friction statique maximale (${fs_max.toFixed(1)} N). 
+      La friction devient <strong>cinétique</strong> (fₖ = ${fk.toFixed(1)} N), généralement plus faible que la friction statique. 
+      Il en résulte une accélération nette : <strong>a = (mg·sinθ − fₖ) / m = ${accel.toFixed(2)} m/s²</strong>.`;
+            }
+
+            stateBox.innerHTML = stateHTML;
+            explainBox.innerHTML = '<strong>💡 Explication :</strong><br>' + explainHTML;
+        }
+
+        // ── Mise à jour ─────────────────────────────────────────
+        function update() {
+            const thetaDeg = parseFloat(slAngle.value);
+            const m = parseFloat(slMass.value);
+            let us = parseFloat(slUs.value);
+            let uk = parseFloat(slUk.value);
+
+            // μk doit toujours être ≤ μs
+            if (uk > us) { uk = us; slUk.value = us; }
+
+            valAngle.textContent = thetaDeg + '°';
+            valMass.textContent = m + ' kg';
+            valUs.textContent = us.toFixed(2);
+            valUk.textContent = uk.toFixed(2);
+
+            draw(thetaDeg, m, us, uk);
+        }
+
+        slAngle.addEventListener('input', update);
+        slMass.addEventListener('input', update);
+        slUs.addEventListener('input', update);
+        slUk.addEventListener('input', update);
+
+        update();
+    </script>
+</body>
+
+</html>
