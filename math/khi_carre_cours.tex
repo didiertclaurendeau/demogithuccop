@@ -1,0 +1,440 @@
+\documentclass[12pt, a4paper]{article}
+
+% -------------------------------------------------------
+% Encodage et langue
+% -------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% -------------------------------------------------------
+% Mise en page
+% -------------------------------------------------------
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{parskip}          % espace entre paragraphes, pas d'indentation
+\usepackage{microtype}        % meilleure typographie
+
+% -------------------------------------------------------
+% Mathématiques
+% -------------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% -------------------------------------------------------
+% Tableaux
+% -------------------------------------------------------
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+
+% -------------------------------------------------------
+% Couleurs et boîtes
+% -------------------------------------------------------
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+% Couleurs personnalisées
+\definecolor{bleuCours}{RGB}{30, 90, 160}
+\definecolor{fondNote}{RGB}{240, 248, 255}
+\definecolor{fondHumour}{RGB}{255, 249, 230}
+\definecolor{bordHumour}{RGB}{255, 180, 0}
+\definecolor{fondAttention}{RGB}{255, 243, 243}
+\definecolor{bordAttention}{RGB}{200, 50, 50}
+
+% Boîte pour les notes humoristiques
+\newtcolorbox{humourbox}{
+  colback=fondHumour,
+  colframe=bordHumour,
+  fontupper=\itshape,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  arc=4pt
+}
+
+% Boîte pour les avertissements
+\newtcolorbox{attentionbox}{
+  colback=fondAttention,
+  colframe=bordAttention,
+  fontupper=\itshape,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  arc=4pt
+}
+
+% Boîte pour les résumés / étapes
+\newtcolorbox{resumebox}{
+  colback=fondNote,
+  colframe=bleuCours,
+  left=6pt, right=6pt, top=6pt, bottom=6pt,
+  arc=4pt
+}
+
+% -------------------------------------------------------
+% Titres
+% -------------------------------------------------------
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries\color{bleuCours}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{bleuCours}}{}{0em}{}
+
+% -------------------------------------------------------
+% En-tête et pied de page
+% -------------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{bleuCours}{\textit{Statistiques — Test du Khi carré}}}
+\lhead{\textcolor{bleuCours}{\textit{Cours}}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% -------------------------------------------------------
+% Commande raccourci
+% -------------------------------------------------------
+\newcommand{\khi}{\chi^2}
+
+% -------------------------------------------------------
+% Document
+% -------------------------------------------------------
+\begin{document}
+
+% Page de titre
+\begin{center}
+  {\LARGE \textbf{\textcolor{bleuCours}{Le Test du Khi carré} ($\chi^2$)}}\\[0.8em]
+  {\large Cours de statistiques}\\[0.4em]
+  {\normalsize \today}
+\end{center}
+
+\vspace{0.5em}
+
+\begin{humourbox}
+« Le Khi carré, c'est comme votre beau-frère qui vérifie si vos dés sont pipés ---
+sauf que lui, il a une formule. »
+\end{humourbox}
+
+\vspace{1em}
+
+% ===================================================
+\section{1. Introduction}
+% ===================================================
+
+Le \textbf{test du Khi carré} (noté $\chi^2$) est un test statistique utilisé pour
+déterminer s'il existe une association significative entre deux variables catégorielles,
+ou si une distribution observée s'écarte significativement d'une distribution théorique
+attendue.
+
+Autrement dit : est-ce que ce qu'on \textbf{observe} dans la vraie vie ressemble à ce
+qu'on \textbf{s'attendait} à voir ? Si la réponse est « pas du tout », les données ont
+quelque chose à nous dire.
+
+Il existe deux grandes variantes :
+
+\vspace{0.5em}
+\begin{center}
+\begin{tabular}{lp{8cm}}
+  \toprule
+  \textbf{Variante} & \textbf{Usage} \\
+  \midrule
+  Test d'ajustement (\textit{goodness of fit}) & Compare une distribution observée à
+    une distribution théorique \\[4pt]
+  Test d'indépendance & Vérifie si deux variables catégorielles sont indépendantes \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+% ===================================================
+\section{2. Conditions d'application}
+% ===================================================
+
+\begin{attentionbox}
+Avant de sortir votre $\chi^2$, assurez-vous que vos données sont invitées au bon party.
+\end{attentionbox}
+
+\vspace{0.5em}
+
+Avant d'appliquer le test du Khi carré, il faut vérifier les conditions suivantes :
+
+\begin{itemize}
+  \item Les données sont des \textbf{fréquences} (effectifs), non des pourcentages ou
+        des moyennes.
+  \item Les observations sont \textbf{indépendantes} les unes des autres.
+  \item Chaque effectif \textbf{théorique} doit être $\geq 5$ dans au moins 80\,\% des
+        cellules.
+  \item Aucun effectif théorique ne doit être \textbf{inférieur à 1}.
+\end{itemize}
+
+% ===================================================
+\section{3. La statistique du Khi carré}
+% ===================================================
+
+\subsection{Formule générale}
+
+\begin{equation}
+  \chi^2 = \sum_{i} \frac{(O_i - E_i)^2}{E_i}
+\end{equation}
+
+Où :
+\begin{itemize}
+  \item $O_i$ = effectif \textbf{observé} dans la catégorie $i$
+  \item $E_i$ = effectif \textbf{attendu} (théorique) dans la catégorie $i$
+  \item $\sum$ = somme sur toutes les cellules
+\end{itemize}
+
+\begin{humourbox}
+Traduction : on regarde combien la réalité s'éloigne de la théorie, on met ça au carré
+pour que personne ne se cache derrière un signe négatif, et on additionne le tout.
+\end{humourbox}
+
+% ===================================================
+\section{4. Test d'ajustement (\textit{Goodness of Fit})}
+% ===================================================
+
+\subsection{Objectif}
+
+Vérifier si une distribution observée correspond à une distribution théorique connue
+(ex. : distribution uniforme, distribution normale, etc.).
+
+\subsection{Exemple}
+
+\begin{humourbox}
+Imaginez que vous soupçonnez votre ami de tricher aux jeux de société. Le Khi carré va
+régler ça scientifiquement --- et diplomatiquement.
+\end{humourbox}
+
+\vspace{0.5em}
+
+Un dé à 6 faces est lancé 120 fois. On observe :
+
+\vspace{0.5em}
+\begin{center}
+\begin{tabular}{lcccccc}
+  \toprule
+  \textbf{Face} & 1 & 2 & 3 & 4 & 5 & 6 \\
+  \midrule
+  \textbf{Observé} ($O_i$) & 18 & 22 & 17 & 25 & 19 & 19 \\
+  \textbf{Attendu}  ($E_i$) & 20 & 20 & 20 & 20 & 20 & 20 \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+\textbf{Calcul :}
+
+\begin{align*}
+  \chi^2 &= \frac{(18-20)^2}{20} + \frac{(22-20)^2}{20} + \frac{(17-20)^2}{20}
+            + \frac{(25-20)^2}{20} + \frac{(19-20)^2}{20} + \frac{(19-20)^2}{20} \\
+         &= \frac{4}{20} + \frac{4}{20} + \frac{9}{20} + \frac{25}{20}
+            + \frac{1}{20} + \frac{1}{20}
+          = \frac{44}{20} = 2{,}2
+\end{align*}
+
+\textbf{Degrés de liberté :} $dl = k - 1 = 6 - 1 = 5$
+
+\begin{humourbox}
+Résultat : $2{,}2 < 11{,}070$. Le dé est innocent. Votre ami peut dormir tranquille.
+\end{humourbox}
+
+% ===================================================
+\section{5. Test d'indépendance}
+% ===================================================
+
+\subsection{Objectif}
+
+Déterminer si deux variables catégorielles sont \textbf{indépendantes} ou
+\textbf{associées}.
+
+\subsection{Tableau de contingence}
+
+Les données sont organisées dans un \textbf{tableau de contingence} à $r$ lignes et
+$c$ colonnes.
+
+\textbf{Effectif attendu pour chaque cellule :}
+
+\begin{equation}
+  E_{ij} = \frac{(\text{Total ligne } i) \times (\text{Total colonne } j)}
+               {\text{Total général}}
+\end{equation}
+
+\textbf{Degrés de liberté :}
+
+\begin{equation}
+  dl = (r - 1)(c - 1)
+\end{equation}
+
+\subsection{Exemple}
+
+On veut savoir si le sexe d'un individu est lié à sa préférence pour un sport.
+
+\vspace{0.5em}
+\begin{center}
+\begin{tabular}{lcccc}
+  \toprule
+   & \textbf{Football} & \textbf{Basketball} & \textbf{Tennis} & \textbf{Total} \\
+  \midrule
+  \textbf{Hommes} & 30 & 15 & 5  & \textbf{50}  \\
+  \textbf{Femmes} & 10 & 25 & 15 & \textbf{50}  \\
+  \textbf{Total}  & \textbf{40} & \textbf{40} & \textbf{20} & \textbf{100} \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+\textbf{Calcul des effectifs attendus :}
+
+\[
+  E_{11} = \frac{50 \times 40}{100} = 20 \quad
+  E_{12} = \frac{50 \times 40}{100} = 20 \quad
+  E_{13} = \frac{50 \times 20}{100} = 10
+\]
+\[
+  E_{21} = 20 \quad E_{22} = 20 \quad E_{23} = 10
+\]
+
+\textbf{Calcul du $\chi^2$ :}
+
+\begin{align*}
+  \chi^2 &= \frac{(30-20)^2}{20} + \frac{(15-20)^2}{20} + \frac{(5-10)^2}{10}
+            + \frac{(10-20)^2}{20} + \frac{(25-20)^2}{20} + \frac{(15-10)^2}{10} \\
+         &= 5 + 1{,}25 + 2{,}5 + 5 + 1{,}25 + 2{,}5 = 17{,}5
+\end{align*}
+
+\textbf{Degrés de liberté :} $dl = (2-1)(3-1) = 2$
+
+% ===================================================
+\section{6. Prise de décision}
+% ===================================================
+
+\begin{humourbox}
+Le statisticien joue les juges : $H_0$ est présumée innocente jusqu'à preuve du
+contraire. Votre $\chi^2$ est l'avocat de l'accusation.
+\end{humourbox}
+
+\subsection{Hypothèses}
+
+\begin{itemize}
+  \item $H_0$ (hypothèse nulle) : Il n'y a \textbf{pas} d'association entre les variables
+        (ou la distribution observée suit la distribution théorique).
+  \item $H_1$ (hypothèse alternative) : Il \textbf{existe} une association entre les
+        variables.
+\end{itemize}
+
+\subsection{Règle de décision}
+
+On compare la valeur calculée de $\chi^2$ à la \textbf{valeur critique}
+$\chi^2_{\alpha,\,dl}$ issue de la table du Khi carré pour un seuil de signification
+$\alpha$ (généralement 0,05).
+
+\vspace{0.5em}
+\begin{center}
+\begin{tabular}{lp{7cm}}
+  \toprule
+  \textbf{Condition} & \textbf{Décision} \\
+  \midrule
+  $\chi^2_{\text{calc}} > \chi^2_{\text{critique}}$ &
+    \textbf{Rejeter $H_0$} $\rightarrow$ association significative \\[4pt]
+  $\chi^2_{\text{calc}} \leq \chi^2_{\text{critique}}$ &
+    \textbf{Ne pas rejeter $H_0$} $\rightarrow$ pas d'association significative \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+On peut aussi comparer la \textbf{p-valeur} au seuil $\alpha$ : si p-valeur $< \alpha$,
+on rejette $H_0$.
+
+\subsection{Table des valeurs critiques (extrait)}
+
+\vspace{0.5em}
+\begin{center}
+\begin{tabular}{cccc}
+  \toprule
+  \textbf{dl} & $\alpha = 0{,}10$ & $\alpha = 0{,}05$ & $\alpha = 0{,}01$ \\
+  \midrule
+  1 & 2,706 & 3,841 &  6,635 \\
+  2 & 4,605 & 5,991 &  9,210 \\
+  3 & 6,251 & 7,815 & 11,345 \\
+  4 & 7,779 & 9,488 & 13,277 \\
+  5 & 9,236 & 11,070 & 15,086 \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Reprise des exemples}
+
+\textbf{Exemple 1 (dé) :} $\chi^2 = 2{,}2$ ; $dl = 5$ ;
+$\chi^2_{\text{critique}}$ ($\alpha = 0{,}05$) $= 11{,}070$
+
+$\Rightarrow\ 2{,}2 < 11{,}070\ \Rightarrow$ \textbf{On ne rejette pas $H_0$} :
+le dé semble équitable.
+
+\vspace{0.5em}
+
+\textbf{Exemple 2 (sport/sexe) :} $\chi^2 = 17{,}5$ ; $dl = 2$ ;
+$\chi^2_{\text{critique}}$ ($\alpha = 0{,}05$) $= 5{,}991$
+
+$\Rightarrow\ 17{,}5 > 5{,}991\ \Rightarrow$ \textbf{On rejette $H_0$} :
+il y a une association significative entre le sexe et la préférence sportive.
+
+% ===================================================
+\section{7. Résumé --- Démarche en 5 étapes}
+% ===================================================
+
+\begin{humourbox}
+Cinq étapes. Pas six. Pas quatre. Cinq. Vous pouvez le faire.
+\end{humourbox}
+
+\vspace{0.5em}
+
+\begin{resumebox}
+\begin{enumerate}
+  \item Formuler $H_0$ et $H_1$
+  \item Choisir le seuil de signification $\alpha$ (ex. : 0,05)
+  \item Calculer $\chi^2$ et les degrés de liberté
+  \item Trouver la valeur critique dans la table
+  \item Prendre la décision et interpréter
+\end{enumerate}
+\end{resumebox}
+
+\vspace{0.5em}
+
+\begin{humourbox}
+Félicitations, vous êtes maintenant capables de débusquer les associations cachées dans
+n'importe quel tableau. Utilisez ce pouvoir avec sagesse (et avec $\alpha = 0{,}05$).
+\end{humourbox}
+
+% ===================================================
+\section{8. Limites du test}
+% ===================================================
+
+\begin{humourbox}
+Même les super-héros ont des faiblesses. Le Khi carré aussi.
+\end{humourbox}
+
+\vspace{0.5em}
+
+\begin{itemize}
+  \item Ne s'applique \textbf{pas} aux données continues (sauf si regroupées en classes).
+  \item Ne mesure \textbf{pas la force} de l'association (pour cela, utiliser le
+        \textbf{V de Cramér}).
+  \item Sensible à la \textbf{taille de l'échantillon} : un très grand échantillon peut
+        rejeter $H_0$ même pour une association triviale.
+\end{itemize}
+
+\begin{humourbox}
+En d'autres mots : avec 10\,000 observations, même « les gens qui mangent des céréales
+au petit-déjeuner sont légèrement plus grands de 0,2~cm » devient statistiquement
+significatif. Ce n'est pas la même chose qu'être \textbf{intéressant}.
+\end{humourbox}
+
+\subsection{V de Cramér (mesure d'effet)}
+
+\begin{equation}
+  V = \sqrt{\frac{\chi^2}{n \times \min(r-1,\; c-1)}}
+\end{equation}
+
+\begin{itemize}
+  \item $V$ proche de 0 $\rightarrow$ association faible
+  \item $V$ proche de 1 $\rightarrow$ association forte
+\end{itemize}
+
+\end{document}

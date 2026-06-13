@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "math/khi_carre_cours.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "khi_carre_cours"
             }
           }
         ],
@@ -200,9 +200,14 @@
   },
   "active": "32233996d8372786",
   "lastOpenFiles": [
-    "philosophes_historique.md",
+    "math/khi_carre_cours.tex",
+    "math/khi_carre_evaluation.md",
+    "math/khi_carre_cours.md",
     "README.md",
+    "math",
     "lab/README.md",
+    "equation_quadratique.md",
+    "philosophes_historique.md",
     "cours/README.md",
     "collab_teams/laboratoire_equipe.md",
     "collab_teams/cours_collaboration_teams.md",
@@ -210,7 +215,6 @@
     "lab/02_montage.md",
     "lab/03_programmation.md",
     "lab/04_test_validation.md",
-    "equation_quadratique.md",
     "collab_teams",
     "Travaux étudiants/F.txt",
     "Travaux étudiants/E.txt",
@@ -229,15 +233,11 @@
     "cours",
     "devoirs/656fb86/retro.md",
     "devoirs/b13342c/README.md",
-    "devoirs/b13342c",
     "devoirs/b10e6e3/README.md",
     "devoirs/b0a6c1c/README.md",
     "devoirs/3343f74/README.md",
     "devoirs/21613c6/README.md",
     "devoirs/78b3405/README.md",
-    "devoirs/67aa12a/README.md",
-    "devoirs/68cf22e/README.md",
-    "devoirs/00f8521/README.md",
     "Pasted image 20260602090014.png"
   ]
 }
